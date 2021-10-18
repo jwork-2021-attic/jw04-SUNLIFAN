@@ -3,9 +3,9 @@ package com.anish.screen;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 
-import com.anish.calabashbros.BubbleSorter;
-import com.anish.calabashbros.Calabash;
-import com.anish.calabashbros.World;
+import com.anish.Monsters.BubbleSorter;
+import com.anish.Monsters.Calabash;
+import com.anish.Monsters.World;
 
 import asciiPanel.AsciiPanel;
 

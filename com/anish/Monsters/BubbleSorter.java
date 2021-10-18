@@ -1,12 +1,17 @@
-package com.anish.calabashbros;
+package com.anish.Monsters;
 
 public class BubbleSorter<T extends Comparable<T>> implements Sorter<T> {
-
+    private Class<T> kind;
     private T[] a;
+    private T[][] matrixFormOfA;
 
+    public BubbleSorter(Class<T> kind){
+        this.kind = kind;
+    }
     @Override
-    public void load(T[] a) {
-        this.a = a;
+    public void load(T[][] a) {
+        this.matrixFormOfA = a;
+        this.a = MyUtils.transformMatrixToArray(matrixFormOfA,kind);
     }
 
     private void swap(int i, int j) {
