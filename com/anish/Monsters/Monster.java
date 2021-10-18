@@ -4,9 +4,9 @@ import java.awt.Color;
 
 public class Monster extends Creature implements Comparable<Monster>{
     private int rank;
-    public Monster(Color color, World world) {
+    public Monster(Color color,World world) {
         super(color, (char) 2, world);
-        this.rank = color.getRed();
+        this.rank = color.getRed()*color.getBlue();
         }
 
     

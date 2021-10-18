@@ -1,10 +1,10 @@
 package com.anish.screen;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 
-import com.anish.Monsters.BubbleSorter;
-import com.anish.Monsters.Calabash;
+import com.anish.Monsters.Monster;
+import com.anish.Monsters.MyUtils;
+import com.anish.Monsters.QuickSorter;
 import com.anish.Monsters.World;
 
 import asciiPanel.AsciiPanel;
@@ -12,32 +12,19 @@ import asciiPanel.AsciiPanel;
 public class WorldScreen implements Screen {
 
     private World world;
-    private Calabash[] bros;
+    private Monster[][] monsters;
     String[] sortSteps;
 
     public WorldScreen() {
         world = new World();
+        int row = 16,col = 16;
 
-        bros = new Calabash[7];
+        monsters = MyUtils.generateMonsters(world);
+        
+        MyUtils.putCreaturesInPlace(monsters, world, row, col, 2, 20, 2);
 
-        bros[3] = new Calabash(new Color(204, 0, 0), 1, world);
-        bros[5] = new Calabash(new Color(255, 165, 0), 2, world);
-        bros[1] = new Calabash(new Color(252, 233, 79), 3, world);
-        bros[0] = new Calabash(new Color(78, 154, 6), 4, world);
-        bros[4] = new Calabash(new Color(50, 175, 255), 5, world);
-        bros[6] = new Calabash(new Color(114, 159, 207), 6, world);
-        bros[2] = new Calabash(new Color(173, 127, 168), 7, world);
-
-        world.put(bros[0], 10, 10);
-        world.put(bros[1], 12, 10);
-        world.put(bros[2], 14, 10);
-        world.put(bros[3], 16, 10);
-        world.put(bros[4], 18, 10);
-        world.put(bros[5], 20, 10);
-        world.put(bros[6], 22, 10);
-
-        BubbleSorter<Calabash> b = new BubbleSorter<>();
-        b.load(bros);
+        QuickSorter<Monster> b = new QuickSorter<>(Monster.class);
+        b.load(monsters);
         b.sort();
 
         sortSteps = this.parsePlan(b.getPlan());
@@ -47,17 +34,16 @@ public class WorldScreen implements Screen {
         return plan.split("\n");
     }
 
-    private void execute(Calabash[] bros, String step) {
+    private void execute(Monster[][] monsters, String step) {
         String[] couple = step.split("<->");
-        getBroByRank(bros, Integer.parseInt(couple[0])).swap(getBroByRank(bros, Integer.parseInt(couple[1])));
+        getMonsterByRank(monsters, Integer.parseInt(couple[0])).swap(getMonsterByRank(monsters, Integer.parseInt(couple[1])));
     }
 
-    private Calabash getBroByRank(Calabash[] bros, int rank) {
-        for (Calabash bro : bros) {
-            if (bro.getRank() == rank) {
-                return bro;
+    private Monster getMonsterByRank(Monster[][] monsters, int rank) {
+        for(int i = 0; i < monsters.length;i++)
+            for(int j = 0; j < monsters[0].length;j++){
+                if(monsters[i][j].getRank() == rank)return monsters[i][j];
             }
-        }
         return null;
     }
 
@@ -79,7 +65,7 @@ public class WorldScreen implements Screen {
     public Screen respondToUserInput(KeyEvent key) {
 
         if (i < this.sortSteps.length) {
-            this.execute(bros, sortSteps[i]);
+            this.execute(monsters, sortSteps[i]);
             i++;
         }
 
